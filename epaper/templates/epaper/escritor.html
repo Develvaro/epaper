@@ -1,0 +1,12 @@
+{% extends "epaper/base.html" %}
+{% block title %} ePaper - {{escritor}} {% endblock %}
+{% block content %}
+  <h1><a href="/noticia/{{noticia.pk}}">{{ noticia.titulo }}</a></h1>
+  <h6>Categoría: <a href="/categoria/{{noticia.categoria}}">{{noticia.categoria}}</a></h6>
+  <p><img src="{{noticia.photo.url}}" class="img-responsive img-thumbnail my_max" align="center"></p>
+  <p>{{ noticia.cuerpo   }}</p>
+  <p><a href="/escritor/{{noticia.autor}}">Autor: {{noticia.autor}}</a></p>
+  <p>Fecha: {{noticia.pub_date}}</p>
+  <span class="glyphicon glyphicon-eye-open btn btn-default btn-disabled"> {{noticia.visitas}} </span> <a class="glyphicon glyphicon-thumbs-up btn btn-default"> {{noticia.likes}} </a>
+
+{% endblock %}

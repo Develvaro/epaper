@@ -1,0 +1,17 @@
+{% extends "epaper/base.html" %}
+{% block title %} ePaper - Login {% endblock %}
+
+{% block content %}
+<form id='form' method ='post' enctype='multipart/form-data' action='/usuario/login/'>{% csrf_token %}
+  <input type="hidden" name="next" value="{{ request.GET.next }}" />
+  <div class="form-group">
+      <label for="id_username">Username:</label>
+      <input  class="form-control" autofocus="" id="id_username" maxlength="150" name="username" type="text" required />
+  </div>
+  <div class="form-group">
+      <label for="id_password1">Password:</label>
+      <input  class="form-control" id="id_password1" name="password" type="password" required />
+  </div>
+  <button type="submit" class="btn btn-default">Entrar</button>
+</form>
+{% endblock %}

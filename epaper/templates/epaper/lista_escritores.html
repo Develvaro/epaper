@@ -1,0 +1,9 @@
+{% extends "epaper/base.html" %}
+{% block title %} ePaper - Autores {% endblock %}
+{% block content %}
+{% for escritor in escritores %}
+  <h1><a href="/escritor/{{escritor}}">{{ escritor }}</a></h1>
+  <hr/>
+{% endfor %}
+<hr/>
+{% endblock %}

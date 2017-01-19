@@ -1,0 +1,38 @@
+{% extends "epaper/base.html" %}
+{% block title %} ePaper - {{titulo.capitalize}} {% endblock %}
+{% block content %}
+<h1>{{titulo.capitalize}}</h1>
+<hr>
+{% for noticia in noticias %}
+  <h2><a href="/noticia/{{noticia.pk}}">{{ noticia.titulo }}</a></h2>
+  <h6>Categoría: <a href="/categoria/{{noticia.categoria}}">{{noticia.categoria}}</a></h6>
+  <p><img src="{{noticia.photo.url}}" class="img-responsive img-thumbnail my_max" align="center"></p>
+  <p>{{ noticia.cuerpo|truncatechars:200 }}</p>
+  <p><a href="/escritor/{{noticia.autor}}">Autor: {{noticia.autor}}</a></p>
+  <p>Fecha: {{noticia.pub_date}}</p>
+  <form method="GET" action="/noticia/{{noticia.pk}}/like/">{% csrf_token %}
+  <p><span class="glyphicon glyphicon-eye-open btn btn-default btn-disabled"> {{noticia.visitas}} </span>
+
+    <button class="glyphicon glyphicon-thumbs-up btn btn-default"> {{noticia.likes}} </button>
+  </form>
+  </p>
+  <hr>
+{% endfor %}
+{% if is_paginated %}
+  <ul class="pagination pagination-centered">
+      {% if page_obj.has_previous %}
+          <li><a href="?page=1">< <</a></li>
+          <li><a href="?page={{ page_obj.previous_page_number }}"><</a></li>
+      {% endif %}
+
+      {% for i in paginator.page_range %}
+          <li {% if page_obj.number == i %} class="active" {% endif %}><a href="?page={{i}}">{{i}}</a></li>
+      {% endfor %}
+
+      {% if page_obj.has_next %}
+          <li><a href="?page={{ page_obj.next_page_number }}">></a></li>
+          <li><a href="?page={{ page_obj.paginator.num_pages }}">>></a></li>
+      {% endif %}
+  </ul>
+{% endif %}
+{% endblock %}

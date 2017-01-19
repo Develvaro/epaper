@@ -1,0 +1,47 @@
+{% extends "epaper/base.html" %}
+{% block title %} ePaper - {{noticia.titulo}} {% endblock %}
+{% block content %}
+{% load custom_template %}
+
+  <h1><a href="/noticia/{{noticia.pk}}">{{ noticia.titulo }}</a></h1>
+  <h6>Categoría: <a href="/categoria/{{noticia.categoria}}">{{noticia.categoria}}</a></h6>
+  <p><img src="{{noticia.photo.url}}" class="img-responsive img-thumbnail my_max" align="center"></p>
+  <p>{{ noticia.cuerpo   }}</p>
+  <p><a href="/escritor/{{noticia.autor}}">Autor: {{noticia.autor}}</a></p>
+  <p>Fecha: {{noticia.pub_date}}</p>
+  <ul class ="list-inline">
+    <li><button class="glyphicon glyphicon-eye-open btn btn-default btn-disabled"> {{noticia.visitas}} </button></li>
+
+    <form method="GET" action="/noticia/{{noticia.pk}}/like/" style="display: inline-block;">{% csrf_token %}
+    <!--<li class="glyphicon glyphicon-eye-open btn btn-default btn-disabled">{{noticia.visitas}}</li> -->
+      <li><button class="glyphicon glyphicon-thumbs-up btn btn-default"> {{noticia.likes}} </button></li>
+    </form>
+    {% if user|has_group:"Editor" %}
+    <form method="GET" action="/noticia/{{noticia.pk}}/editar/" style="display: inline-block;">{%csrf_token%}
+      <li><button class="glyphicon glyphicon glyphicon glyphicon-pencil btn btn-default"> Editar </button></li>
+    </form>
+    <form method="POST" action="/noticia/{{noticia.pk}}/borrar/" style="display: inline-block;" >{%csrf_token%}
+      <li><button class="glyphicon glyphicon glyphicon-trash btn btn-default"> Borrar </button></li>
+    </form>
+    {% endif %}
+  </ul>
+  {% for comentario in noticia.comentarios.all %}
+    <hr>
+    <b><p>{{comentario.usuario}}</b> - {{comentario.fecha_publicacion}}</p>
+    <p>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp{{comentario.texto}}</p>
+  {% endfor %}
+  <hr>
+  <p>Comentar:
+  {% if user.is_authenticated %}
+  <form class="navbar-form navbar-left" method="POST" action="/comentario/nuevo/{{noticia.pk}}">{% csrf_token %}
+    <div class="form-group">
+      <textarea class="form-control"  rows="6" cols="70" placeholder="Comentario." name="texto" required></textarea>
+    </div>
+    <br><button type="submit"  class="btn btn-default">Enviar</button>
+  </form>
+  </form>
+  {% else %}
+  <p> Necesitas estar logueado para comentar </p>
+  <p><a href="/usuario/login/?next=/noticia/{{noticia.pk}}">Login</a> | <a href="/usuario/nuevo/">Registro</a></p>
+  {% endif %}
+  {% endblock %}

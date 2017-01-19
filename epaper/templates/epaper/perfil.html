@@ -1,0 +1,24 @@
+{% extends "epaper/base.html" %}
+
+{% block title %} ePaper - Perfil {% endblock %}
+
+{% block content %}
+{% load custom_template %}
+
+<div class="list-group">
+
+  <a href="#" class="list-group-item active">Usuario: {{user}}</a>
+  <a href="#" class="list-group-item">Nombre: {{user.first_name}}</a>
+  <a href="#" class="list-group-item">Apellidos: {{user.last_name}}</a>
+  <a href="#" class="list-group-item">Foto: <img src={{user.perfil.profile_photo.url}} class="img-responsive" style="height:200px;"></img></a>
+</div>
+
+<ul class ="list-inline">
+{% if user|has_group:"Editor" %}
+<li><a class="btn btn-default" href="/noticia/nueva/">Nueva noticia</a></li>
+{% endif %}
+<li><a class="btn btn-default" href="/usuario/perfil/editar/">Editar Perfil</a></li>
+<li><a class="btn btn-default" href="/usuario/perfil/editar/pass/">Cambiar contraseña</a></li>
+
+</ul>
+{% endblock %}
